@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+# Allows you to listen to youtube video's audio  only
+# using mpv + yt-dlp
+
+readonly YT="$1"
+
+if [[ -z "$YT" ]]; then
+    printf "Error: youtube URL required\n"
+    exit 1
+fi
+
+if [[ "$YT" != *youtube.com/* && "$YT" != *soundcloud.com/* ]]; then
+  printf "Error: only youtube.com or soundcloud.com URLs are supported\n"
+  exit 1
+fi
+
+mpv --no-video --ytdl-format="bestaudio/best" "$YT"

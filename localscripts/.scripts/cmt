@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+# Add a comment character within vi/m
+# Ref: https://rwx.gg/tools/editors/vi/how/magic/
+
+cmt="$1"
+
+if [[ -z "$cmt" ]]; then
+    cmt="#"
+fi
+
+while IFS= read -r line; do
+    echo "${1:-$cmt} $line"
+done <&0

@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+# quick script to start the browser-sync tool when doing local web dev
+# browser-sync is a node tool. Install node + npx install browser-sync beforehand
+local_ip="$(ip -f inet addr show wlp2s0 | sed -En -e 's/.*inet ([0-9.]+).*/\1/p')"
+
+dir="${1:-.}"
+
+browser-sync start -s -f "$dir" --no-notify --host $local_ip --port 8000

@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+# An attempt to write an alignment plugin called from within vim
+
+align_at="$1"
+
+if [[ -z "$align_at" ]]; then
+    align_at="="
+fi
+
+column -t <&0 | sed "s/ $align_at /$align_at/"

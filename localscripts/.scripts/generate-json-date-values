@@ -1,0 +1,85 @@
+#!/usr/bin/bash
+# Generates a JSON array of objects grouped by a date key which is incremented by
+# a day, week, month or year with value keys generating random integers
+# This was used in my amCharts days, but is useful for generating
+# random JSON arrays of dates with values
+# Requires jq + jo
+
+format="${1}"
+start_date="${2}"
+num_elements="${3}"
+date_increment="${4,,}"
+min="$5"
+max="$6"
+value_fields=("${@: 7}")
+date_format=""
+
+if [[ "$format" == "-h" || "$format" == "--help" ]]; then
+  printf "Usage: %s ts|dt date array_size [day|week|month|year] valuefield1 .. valuefieldn \n" "$(basename "${0}")"
+  exit 0
+fi
+
+if [[ -z "$format" ]]; then
+  echo 'format is required.'
+  exit 1
+fi
+
+if [[ "$format" == "ts" ]]; then
+  date_format="+%s"
+else
+  date_format="+%Y-%m-%d"
+fi
+
+if ! date "$date_format" -d "$start_date" > /dev/null 2>&1; then
+    echo 'Valid date required'
+    exit 2
+fi
+
+# if [[ -z "$date_increment" || ("$date_increment" != "day" && "$date_increment" != "month" && "$date_increment" != "week" && "$date_increment" != "year") ]]; then
+if [[ -z "$date_increment" || ! ("$date_increment" =~ ^(hour|day|week|month|year) ) ]]; then
+    echo 'Date increment required (day|week|month|year)'
+    exit 3
+fi
+
+if [[ -z "$num_elements" || "$num_elements" -le 0 ]]; then
+    echo 'Must specify number of elements greater than 0.'
+    exit 4
+fi
+
+if [[ $5 != ?(-)+([0-9]) || $6 != ?(-)+([0-9]) ]]; then
+  echo 'Min/Max must be integers'
+  exit 5
+fi
+
+if [[ "${#value_fields[@]}" == 0 ]]; then
+    echo 'Must specify at least one value field'
+    exit 6
+fi
+
+if [[ "$date_increment" == "hour" && "$format" == "dt" ]]; then
+  date_format="${date_format}T%H:%M:%S"
+  if [[ $start_date != *EST ]]; then
+    start_date="${start_date}EST"
+  fi
+fi
+
+result=()
+
+for t in $(seq 0 "$(( num_elements - 1 ))"  ); do
+    new_vals=()
+    for v in "${value_fields[@]}"; do
+      new_vals+=( "$v="$(((RANDOM % max) + min)) )
+    done
+    if [[ $t -eq $(( num_elements - 1 )) ]]; then
+        delim=""
+    else
+        delim=","
+    fi
+    the_date="$(date "$date_format" -d "$start_date + $t $date_increment")"
+    if [[ "$format" == "ts" ]]; then
+      the_date=$((the_date*1000))
+    fi
+    result+=( "$(jo date="$the_date" "${new_vals[@]}")$delim" )
+done
+
+echo '[' "${result[@]}" ']' | jq

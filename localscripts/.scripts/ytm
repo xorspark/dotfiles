@@ -1,0 +1,22 @@
+#!/usr/bin/bash
+# download to mp4
+# using mpv + yt-dlp
+
+readonly YT="$1"
+readonly SUBS="$2"
+
+if [[ -z "$YT" ]]; then
+    printf "Error: youtube URL required\n"
+    exit 1
+fi
+
+if [[ "$YT" != *youtube.com/* ]]; then
+  printf "Error: only youtube.com URLs are supported\n"
+  exit 1
+fi
+
+if [[ -n "$SUBS" ]]; then
+  sub_flag="--embed-subs"
+fi
+
+yt-dlp -o '%(title)s.%(ext)s' -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best"  "$sub_flag" --no-mtime "$YT"

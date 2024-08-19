@@ -1,0 +1,32 @@
+#!/usr/bin/bash
+# forcing vscode/codium to recognize a project using pipenv
+curr_dir="$PWD"
+
+
+
+if ! python_path=$(pipenv --py); then
+  printf 'Aborting vscode init\n'
+  exit 1
+fi
+
+if [[ -f "$curr_dir/.vscode/settings.json" ]]; then
+  printf 'settings already configured\n'
+  exit 1
+fi
+
+mkdir -p "$curr_dir/.vscode"
+
+printf '
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.pyc": true,
+        "**/__pycache__": true
+    },
+    "python.defaultInterpreterPath": "%s"
+}\n' "$python_path" > "$curr_dir/.vscode/settings.json"
+

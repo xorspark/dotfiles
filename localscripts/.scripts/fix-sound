@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+# Fix for crummy laptops where the audio randomly dies.
+# edit: 2024-08-19 - I don't remember when was the last time I used this, but
+# I'm sure I'll need this again at *some* point.
+source /etc/os-release
+
+if [[ "$NAME" == "Ubuntu" ]]; then 
+  # My ubuntu machine uses pulseaudio directly
+  printf "May need to rerun multiple times\n"
+  pulseaudio -k
+  pulseaudio --restart
+
+  sleep 40 && pulseaudio --restart
+else
+  # other (systemd-based) machines use pipewire
+  printf "Wait a bit until the volume notification pops back up then stop/play your media again.\n"
+  systemctl --user restart pipewire pipewire-pulse
+  systemctl --user daemon-reload
+fi

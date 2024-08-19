@@ -1,0 +1,76 @@
+#!/usr/bin/bash
+# Growing list of radio stations to listen to while coding
+# I should probably store the stations in a different file or something...
+
+# do some detective work on what device you need to set
+# using pacmd list-sinks
+# Localise work pc's speaker/headphones is on index 3
+# shellcheck disable=SC2155
+readonly AUDIO_DEVICE_INDEXES="$(pactl list short sinks | grep alsa_output | cut -f1)"
+readonly VOLUME_PERCENT="18%"
+
+stations=(
+  'https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://pulseedm.cdnstream1.com:8124/1373_128.m3u&t=.pls'
+  'https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://dancewave.online/dance.mp3.m3u&t=.pls'
+  'https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://stream.dancewave.online:8080/retrodance.mp3.m3u&t=.pls'
+  #  http://www.retronow.ie
+  'https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://144.217.195.24:9007/listen.pls?sid=1&t=.pls'
+  # 80ssoundtracks
+  'https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://uk5.internet-radio.com:8256/listen.pls&t=.pls'
+  # EtherealEighties.com
+  'https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://us1.internet-radio.com:8009/live.m3u&t=.pls'
+  # Hot Hitz 80's
+  'https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://63.143.40.238:9900/listen.pls?sid=1&t=.pls'
+  # Classic hits 109
+  'https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://51.161.115.200:8142/listen.pls?sid=1&t=.pls'
+  # Back to the 80s Radio
+  'https://www.internet-radio.com/servers/tools/playlistgenerator/?u=http://149.56.185.82:8135/listen.pls&t=.pls'
+  # DFM - Vocal Trance (https://dfm.ru/)
+  'http://dfm-trance.hostingradio.ru/trance96.aacp'
+  # .977 80s
+  # 'https://26113.live.streamtheworld.com/977_80_SC?dist=onlineradiobox'
+  'https://playerservices.streamtheworld.com/api/livestream-redirect/977_80_SC?dist=onlineradiobox'
+  # Big 80s radio
+  'http://158.69.114.190:8065/listen.pls?sid=1'
+  # radio.plaza.one
+  'https://radio.plaza.one/ogg_low'
+  # OpenLab (RIP Robert Miles)
+  'https://ice04.fluidstream.net/openlab.mp3'
+  # 90s 90s Dance
+  'http://streams.90s90s.de/eurodance/mp3-192/radiode'
+  # 90s 90s Techno
+  'http://streams.90s90s.de/techno/mp3-192/radiode/'
+  # 90s 90s Hits
+  'http://streams.90s90s.de/pop/mp3-192/streams.90s90s.de/'
+  # 90s 90s Rap
+  'http://streams.90s90s.de/hiphop/mp3-192/streams.90s90s.de/'
+  # Dancerevradio.com
+  'https://s5.radio.co/s89dcf578d/listen'
+)
+
+
+
+
+stations+=("quit")
+
+select station in "${stations[@]}"; do
+    if [[ -n "$station" ]]; then
+        if [[ "$station" == "quit" ]]; then
+            exit 0
+        else
+            break
+        fi
+    fi
+done
+
+# Done to prevent blowing out my ears when running this after a zoom call
+# because some people have awful mics that force me to up my volume to 50%
+# The same volume level will kill my friggin eardrums when I play music.
+for sink in  $AUDIO_DEVICE_INDEXES; do
+  if ! pactl set-sink-volume "$sink" "$VOLUME_PERCENT"; then
+    echo "Could not set volume. Check if pulse audio isn't busted. "
+    exit 1
+  fi
+done
+
+mpv "$station"

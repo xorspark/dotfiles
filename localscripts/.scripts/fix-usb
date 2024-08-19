@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+# Force fix crappy usb behavior where the port(s) isn't recognized anymore
+set -eo pipefail
+
+DEVICE=$(lspci -Dm | grep "USB controller" | cut -f1 -d' ' | head -n1)
+
+echo $DEVICE > /sys/bus/pci/drivers/xhci_hcd/unbind
+echo $DEVICE > /sys/bus/pci/drivers/xhci_hcd/bind

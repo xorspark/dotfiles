@@ -1,0 +1,41 @@
+#!/usr/bin/bash
+# Allows you to watch a twitch stream at the desired encoding rate
+# using mpv + yt-dlp
+twitch_name="$1"
+
+if [[ -z "$twitch_name" ]]; then
+    printf "Error: twitch username required.\n"
+    exit 1
+fi
+
+declare -a formats
+declare extra_flags
+while read -r yt_output_line; do
+  read -d' ' -ra line_parts  <<< "$yt_output_line"
+  if [[ "${line_parts[0]}" =~ ^[0-9] || "${line_parts[0]}" =~ ^audio ]]; then 
+    formats+=( "${line_parts[0]}" )
+  fi
+done < <(yt-dlp -F "https://twitch.tv/$twitch_name")
+
+# twitch account does not exist/offline/banned? Bail.
+if [[ "${#formats[@]}" == 0 ]]; then
+  exit 0
+fi
+
+formats+=("quit")
+
+select format in "${formats[@]}"; do
+    if [[ -n "$format" ]]; then
+        if [[ "$format" == "quit" ]]; then
+            exit 0
+        else 
+            break
+        fi
+    fi
+done
+
+if [[ "$format" == "audio_only" ]]; then
+  extra_flags="--no-video"
+fi
+
+mpv "$extra_flags" --ytdl-format="$format" "https://twitch.tv/$twitch_name"

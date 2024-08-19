@@ -1,0 +1,17 @@
+#!/usr/bin/bash
+# download to mp3
+# using mpv + yt-dlp
+
+readonly YT="$1"
+
+if [[ -z "$YT" ]]; then
+    printf "Error: youtube URL required\n"
+    exit 1
+fi
+
+if [[ "$YT" != *youtube.com/* && "$YT" != *soundcloud.com/* && "$YT" != *youtu.be/* ]]; then
+  printf "Error: only youtube.com URLs are supported\n"
+  exit 1
+fi
+
+yt-dlp -o '%(artist)s - %(title)s.%(ext)s' -x --audio-format mp3 --embed-metadata --no-mtime "$YT"

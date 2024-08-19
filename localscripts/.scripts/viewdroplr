@@ -1,0 +1,51 @@
+#!/usr/bin/bash
+# View droplr content from the terminal by extracting the content URL
+# from the in-page JSON metadata
+#
+# Requires jq, feh and mpv
+
+main() {
+  local url="$1"
+  local json_payload
+  local content_url
+  local mime_type
+
+  if [[ -z "$url" ]]; then
+    printf "URL is required\n"
+    return 1
+  fi
+
+  if [[ ! ("$url" =~ ^https://d.pr/) ]]; then
+    printf "Url must be from d.pr domain\n"
+    return 1
+  fi
+
+  printf "Retrieving content from %s\n" "$url"
+
+  json_payload="$(curl -sSL "$url" | grep window.PRELOADED_STATE)"
+  json_payload="${json_payload#*=}"
+
+  if [[ -n "$json_payload" ]] && jq -e . >/dev/null 2>&1 <<< "$json_payload"; then
+    content_url="$(jq -r '.drops.current.content' <<< "$json_payload")"
+    if [[ -z "$content_url" ]]; then
+      printf "Content not found.\n"
+      return 1
+    fi
+    mime_type="$(curl -sSLI "$content_url" | grep -- content-type)"
+    mime_type="${mime_type#*: }"
+    printf "URL: %s\nMime-type: %s\n" "$content_url" "$mime_type"
+    if [[ "$mime_type" =~ ^video ]]; then
+      mpv --loop=inf "$content_url"
+    elif [[ "$mime_type" =~ ^image ]]; then
+      feh -ZF "$content_url"
+    else
+      printf "Unsupported mime-type\n"
+      return 1
+    fi
+  else
+    printf "Can't find PRELOADED_STATE JSON\n"
+    return 1
+  fi
+}
+
+main "$@"

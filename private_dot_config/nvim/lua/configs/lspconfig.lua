@@ -37,3 +37,40 @@ lspconfig["rust_analyzer"].setup {
     },
   },
 }
+
+lspconfig["efm"].setup {
+  on_attach = nvlsp.on_attach,
+  -- on_init = nvlsp.on_init,
+  capabilities = nvlsp.capabilities,
+  init_options = {
+    documentFormatting = true,
+  },
+  filetypes = { "sh", "bash" },
+  settings = {
+    rootMarkers = {},
+    languages = {
+      sh = {
+        { formatCommand = "shfmt -ci -s -bn", formatStdin = true },
+        {
+          prefix = "shellcheck",
+          lintCommand = "shellcheck --color=never -f gcc -x",
+          lintSource = "efm/shellcheck",
+          lintIgnoreExitCode = true,
+          lintStdin = true,
+          lintFormats = { "%f:%l:%c: %trror: %m", "%f:%l:%c: %tarning: %m", "%f:%l:%c: %tote: %m" },
+        },
+      },
+      bash = {
+        { formatCommand = "shfmt -ci -s -bn", formatStdin = true },
+        {
+          prefix = "shellcheck",
+          lintCommand = "shellcheck --color=never -f gcc -x -",
+          lintSource = "efm/shellcheck",
+          lintIgnoreExitCode = true,
+          lintStdin = true,
+          lintFormats = { "%f:%l:%c: %trror: %m", "%f:%l:%c: %tarning: %m", "%f:%l:%c: %tote: %m" },
+        },
+      },
+    },
+  },
+}

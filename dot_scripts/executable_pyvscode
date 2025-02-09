@@ -1,5 +1,5 @@
-#!/bin/bash
-
+#!/usr/bin/bash
+# forcing vscode/codium to recognize a project using pipenv
 curr_dir="$PWD"
 
 

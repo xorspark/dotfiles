@@ -1,0 +1,3 @@
+#!/bin/sh
+# paste alias when I'm stuck on a (dumb) keyboard without an insert key
+xsel -o

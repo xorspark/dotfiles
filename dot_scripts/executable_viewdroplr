@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 # View droplr content from the terminal by extracting the content URL
 # from the in-page JSON metadata
 #

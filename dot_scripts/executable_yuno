@@ -1,0 +1,15 @@
+#!/usr/bin/bash 
+# makes mocking alt caps text from stdin
+
+upper=0
+while IFS= read -N 1 line; do   
+    if [[ "$line" =~ [[:space::]] ]]; then
+        printf "%s" "$line"
+    elif (( upper == 0 )); then
+        printf "%s" "${line,}"
+        upper=1
+    else
+        printf "%s" "${line^}"
+        upper=0
+    fi
+done <&0

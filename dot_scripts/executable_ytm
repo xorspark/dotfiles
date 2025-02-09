@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/bash
 # download to mp4
-# using mpv + youtube-dl
+# using mpv + yt-dlp
 
 readonly YT="$1"
 readonly SUBS="$2"

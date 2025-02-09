@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-
+# An attempt to write an alignment plugin called from within vim
 
 align_at="$1"
 

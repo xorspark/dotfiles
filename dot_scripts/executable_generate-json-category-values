@@ -1,0 +1,53 @@
+#!/usr/bin/bash
+# Generates a JSON array of objects grouped by a specified category key
+# with valuekeys containing random integers
+# This was used in my amCharts days, but is useful for generating
+# random JSON arrays of objects
+# Requires jq + jo
+category="${1}"
+
+num_elements="${2,,}"
+category_prefix="$3"
+value_fields=("${@: 4}")
+
+if [[ -z "$category" || "$category" == "-h" || "$category" == "--help" ]]; then
+  printf "Usage: %s category_name array_size category_value_prefix valuefield1 .. valuefieldn \n" "$(basename "${0}")"
+  exit 0
+fi
+
+if [[ -z "$num_elements" || "$num_elements" -le 0 ]]; then
+    echo 'Must specify number of elements greater than 0.'
+    exit 2
+fi
+
+if [[ -z "$category_prefix" ]]; then
+    echo 'Must specify a prefix to add to your category values'
+    exit 3
+fi
+
+if [[ "${#value_fields[@]}" == 0 ]]; then
+    echo 'Must specify at least one value field'
+    exit 4
+fi
+
+result=()
+
+
+for t in $(seq 1 "$num_elements"); do
+    new_vals=()
+    for v in "${value_fields[@]}"; do
+        new_vals+=( "$v="$((RANDOM % 30)) )
+    done
+
+    if [[ $t -eq $num_elements ]]; then
+        delim=""
+    else
+        delim=","
+    fi
+
+    next_category="$category_prefix-$t"
+
+    result+=( "$(jo "$category"="$next_category" "${new_vals[@]}")$delim" )
+done
+
+echo '[' "${result[@]}" ']' | jq

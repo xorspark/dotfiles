@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/bash
 # Allows you to listen to youtube video's audio  only
-# using mpv + youtube-dl
+# using mpv + yt-dlp
 
 readonly YT="$1"
 

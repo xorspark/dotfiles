@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+# Need a quick script? Just use newx.
+# Lovingly pinched from rwxrob's dot repo
+test ! -n "${SCRIPTS}"  && echo "SCRIPTS not set" && exit 1;
+test ! -n "${1}"  && echo "usage: newx <name>" && exit 1;
+
+path="${SCRIPTS}/${1}"
+
+if [[ -e "${path}" ]]; then
+  read -r -p "${1} already exists. Edit? " yes
+  case "${yes}" in
+    y|yes|yep|yeppers|yeah|ok|okay) exec vim "${path}"
+  esac
+  exit 0
+fi
+
+printf "#!/usr/bin/bash\n\n" > "${path}"
+chmod +x "${path}" 
+exec vim +2 "${path}"

@@ -1,0 +1,82 @@
+#!/bin/bash
+
+curr_dir="$PWD"
+project_name="$1"
+
+if ! command -v zig > /dev/null; then
+  printf "zig executable not found in path!\n"
+  exit 1
+fi
+
+if [[ -z "$project_name" ]]; then 
+  printf "Must specify a project name\n"
+  exit 1
+fi
+
+if [[ "$curr_dir" != *"$project_name" ]]; then
+  printf "Make sure your project name matches the root folder of your current zig project folder\n"
+  printf "Current directory: %s\nSpecified project name: %s\n" "$curr_dir" "$project_name"
+  exit 1
+fi
+
+#if [[ -f "$curr_dir/.vscode/launch.json" && -f "$curr_dir/.vscode/tasks.json" ]]; then
+#  printf "Launch and Tasks are already configured.\n"
+#  exit
+#fi
+
+mkdir -p "$curr_dir/.vscode"
+
+#shellcheck disable=SC2016
+printf '
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug",
+            "program": "${workspaceFolder}/zig-out/bin/%s",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "zig build"
+        },
+    ]
+}
+' "$project_name" > "$curr_dir/.vscode/launch.json"
+
+#shellcheck disable=SC2016
+printf '
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "zig build",
+            "type": "shell",
+            "command": "zig",
+            "args": [
+                "build",
+                "--summary",
+                "all"
+            ],
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
+' > "$curr_dir/.vscode/tasks.json"

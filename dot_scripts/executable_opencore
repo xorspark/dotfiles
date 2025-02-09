@@ -1,0 +1,7 @@
+#!/bin/bash
+
+xhost +
+export DISPLAY=:0
+pushd ~/osxshit/OSX-KVM
+sudo -E -u root ./OpenCore-Boot.sh
+popd

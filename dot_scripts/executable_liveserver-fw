@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# open up port so I can view this from a different system
+sudo firewall-cmd --add-port=8000/tcp
+sudo firewall-cmd --add-port=8000/tcp --zone=libvirt
+#sudo systemctl restart firewalld

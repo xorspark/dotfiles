@@ -1,0 +1,7 @@
+#!/bin/bash
+
+declare -a secret
+secret=( T A S E R )
+
+
+printf '%s\n' "${secret[*]}"

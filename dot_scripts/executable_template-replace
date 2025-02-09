@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# usage: template-replace template-file file-to-inject [template-string]
+# default template string: __REPLACE__
+# resulting file to stdout. redirect amongst yourselves.
+
+main() {
+  if [[ -z "$1" || ! -f "$1" ]]; then
+    printf "Template file required.\n"
+    exit 1
+  fi
+  if [[ -z "$2" || ! -f "$2" ]]; then 
+    printf "Inject file required.\n"
+    exit 2
+  fi
+
+  local -r template_file="$1" inject_file="$2" 
+  local -r outfile="$(dirname "$(readlink -f "$inject_file")")/$(basename "${1%.*}-combined.${1##*.}")"
+  local template_replace_string="__REPLACE__"
+
+  if [[ -n "$3" ]]; then
+    template_replace_string="$3"
+  fi
+  # printf "%s\n%s\n%s\n%s\n" "$template_file" "$inject_file" "$template_replace_string" "$outfile"
+  #
+  awk -v inject="$(<"$inject_file")" -v search_str="$template_replace_string" '$0 ~ search_str { $0 = inject } 1' "$template_file" > "$outfile"
+}
+
+main "$@"

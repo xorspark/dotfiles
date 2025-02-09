@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]; then
+  printf 'Millisecond timestamp required.\n'
+  exit 1
+fi
+
+perl -e "print scalar localtime($1 / 1000)"
+echo

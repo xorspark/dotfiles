@@ -1,0 +1,73 @@
+# Sample .bashrc for SUSE Linux
+# Copyright (c) SUSE Software Solutions Germany GmbH
+
+# There are 3 different types of shells in bash: the login shell, normal shell
+# and interactive shell. Login shells read ~/.profile and interactive shells
+# read ~/.bashrc; in our setup, /etc/profile sources ~/.bashrc - thus all
+# settings made here will also take effect in a login shell.
+#
+# NOTE: It is recommended to make language settings in ~/.profile rather than
+# here, since multilingual X sessions would not work properly if LANG is over-
+# ridden in every subshell.
+
+test -s ~/.alias && . ~/.alias || true
+test -s ~/.profile && . ~/.profile || true
+
+export SCRIPTS="$HOME/.scripts"
+export PATH="$HOME/.bin:$HOME/.local/bin:/usr/local/go/bin:$HOME/go/bin:$SCRIPTS:$PATH"
+set -o vi
+#
+# Base16 Shell
+# BASE16_SHELL="$HOME/.config/base16-shell/"
+# [ -n "$PS1" ] && \
+#     [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+#         source "$BASE16_SHELL/profile_helper.sh"
+
+export VISUAL=nvim
+export EDITOR="$VISUAL"
+
+
+ms_ts_to_date() {
+    if [[ -n "$1" ]]; then
+        perl -e "print scalar localtime($1 / 1000)"
+    fi
+}
+
+instant_wordpress() {
+    docker run --rm --name mysql01 -e MYSQL_ROOT_PASSWORD=Password1234 -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress -d mysql --default-authentication-plugin=mysql_native_password
+    docker run --rm --name wordpress01 --link mysql01 -p 8080:80 -e WORDPRESS_DB_HOST=mysql01:3306 -e WORDPRESS_DB_USER=root -e WORDPRESS_DB_PASSWORD=Password1234 -e WORDPRESS_DB_NAME=wordpress -e WORDPRESS_TABLE_PREFIX=wp_ -d wordpress
+}
+
+del_wordpress() {
+    docker stop wordpress01
+    docker stop mysql01
+}
+
+http_py_webserver() {
+    extra_args=""
+    if [[ -n "$1" && -d "$1" ]]; then
+        printf -v extra_args -- "-d %s" "$1"
+    fi
+    python3 -m http.server $extra_args
+}
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color|*-256color) color_prompt=yes;;
+esac
+
+# Docker
+export DOCKER_HOST=unix:///run/user/1000/docker.sock
+
+
+# fnm
+export PATH="/home/spark/.local/share/fnm:$PATH"
+eval "$(fnm env --use-on-cd)"
+export GOTELEMETRY=off
+
+. "$HOME/.cargo/env"
+
+
+if [ -f ~/.config/exercism/exercism_completion.bash ]; then
+  source ~/.config/exercism/exercism_completion.bash
+fi

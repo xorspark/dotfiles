@@ -1,0 +1,9 @@
+#!/bin/bash
+
+
+# -- completion --
+# complete -C greet greet
+if [[ -n $COMP_LINE ]]; then 
+  printf "foo\nbar\n\nblah"
+  exit
+fi

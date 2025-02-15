@@ -50,7 +50,7 @@ lspconfig["efm"].setup {
     rootMarkers = {},
     languages = {
       sh = {
-        { formatCommand = "shfmt -ci -s -bn", formatStdin = true },
+        { formatCommand = "shfmt -s -i 2 -ci -bn", formatStdin = true },
         {
           prefix = "shellcheck",
           lintCommand = "shellcheck --color=never -f gcc -x",
@@ -61,7 +61,7 @@ lspconfig["efm"].setup {
         },
       },
       bash = {
-        { formatCommand = "shfmt -ci -s -bn", formatStdin = true },
+        { formatCommand = "shfmt -s -i 2 -ci -bn", formatStdin = true },
         {
           prefix = "shellcheck",
           lintCommand = "shellcheck --color=never -f gcc -x -",

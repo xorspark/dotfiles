@@ -1,17 +1,23 @@
 #!/usr/bin/bash
-# download to mp3
+# download to mp3 or vorbis
 # using mpv + yt-dlp
 
 readonly YT="$1"
+format="${2:-mp3}"
+format="${format,,}"
 
-if [[ -z "$YT" ]]; then
-    printf "Error: youtube URL required\n"
-    exit 1
+if [[ -z $YT ]]; then
+  printf "Error: youtube URL required\n"
+  exit 1
 fi
 
-if [[ "$YT" != *youtube.com/* && "$YT" != *soundcloud.com/* && "$YT" != *youtu.be/* ]]; then
+if [[ $YT != *youtube.com/* && $YT != *soundcloud.com/* && $YT != *youtu.be/* ]]; then
   printf "Error: only youtube.com URLs are supported\n"
   exit 1
+fi
+
+if [[ ! $format =~ mp3|vorbis|ogg ]]; then
+  printf "Error: only mp3 and ogg(vorbis) allowed"
 fi
 
 yt-dlp -o '%(artist)s - %(title)s.%(ext)s' -x --audio-format mp3 --embed-metadata --no-mtime "$YT"

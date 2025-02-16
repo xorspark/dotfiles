@@ -61,8 +61,9 @@ export DOCKER_HOST=unix:///run/user/1000/docker.sock
 
 
 # fnm
-export PATH="/home/spark/.local/share/fnm:$PATH"
-eval "$(fnm env --use-on-cd)"
+# export PATH="/home/spark/.local/share/fnm:$PATH"
+eval "$(fnm env --use-on-cd --shell bash)"
+# eval "$(fnm env --use-on-cd)"
 export GOTELEMETRY=off
 
 . "$HOME/.cargo/env"

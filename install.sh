@@ -1,0 +1,93 @@
+#!/bin/bash
+
+readonly PACKAGES=(
+  git
+  chezmoi
+  keyd
+  wezterm
+  alacritty
+  neovim
+  shfmt
+  curl
+)
+
+readonly UBUNTU_PACKAGES=(
+  shellcheck
+)
+
+readonly ZYPPER_PACKAGES=(
+  ShellCheck
+  docker
+  luajit
+  luajit-devel
+  keyd
+  clang19
+  clang19-devel
+  gcc14
+  gcc14-c++
+  efm-langserver
+  fnm
+  fnm-bash-completion
+  python312
+  python312-pipx
+  python312-devel
+)
+
+readonly PIPX_PACKAGES=(
+  poetry
+  ruff
+)
+
+if [[ ! -f /etc/os-release ]]; then
+  printf "Can't find os-release\n"
+  exit 1
+fi
+
+source /etc/os-release
+
+printf 'Detected %s.\n' "$ID"
+if [[ $ID =~ opensuse* ]]; then
+  install_command="zypper in"
+  refresh_command="zypper ref"
+elif [[ $ID =~ ubuntu* ]]; then
+  install_command="apt install"
+  refresh_command="apt update"
+else
+  printf 'Distro not supported (in my rotation) yet.\n'
+  exit 1
+fi
+
+#shellcheck disable=SC2086
+sudo $refresh_command
+
+printf 'Installing basic stuff needed to set this all up\n'
+
+#shellcheck disable=SC2086,SC2048
+sudo $install_command -y ${PACKAGES[*]}
+
+# Rust stuff
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+mkdir -p ~/.local/bin
+curl -L https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz | gunzip -c - >~/.local/bin/rust-analyzer
+chmod +x ~/.local/bin/rust-analyzer
+
+if [[ $ID =~ opensuse* ]]; then
+  #shellcheck disable=SC2086,SC2048
+  sudo $install_command -y ${ZYPPER_PACKAGES[*]}
+  usermod -a -G docker "$USER"
+  # fnm
+  fnm install --lts
+  eval "$(fnm env --use-on-cd --shell bash)"
+  npm install -g js-beautify
+  #shellcheck disable=SC2086,SC2048
+  pipx-3.12 install ${PIPX_PACKAGES[*]}
+  pipx-3.12 inject poetry poetry-plugin-shell
+else
+  #shellcheck disable=SC2086,SC2048
+  sudo $install_command -y ${UBUNTU_PACKAGES[*]}
+fi
+
+printf 'Applying stuff from dotfiles repo\n'
+chezmoi init --apply xorspark
+
+printf 'Remember to open a new shell/session afterward for the new env vars to take effect (bash -l)\n'

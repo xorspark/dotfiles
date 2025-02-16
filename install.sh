@@ -17,6 +17,7 @@ readonly UBUNTU_PACKAGES=(
 
 readonly ZYPPER_PACKAGES=(
   ShellCheck
+  xsel
   docker
   luajit
   luajit-devel

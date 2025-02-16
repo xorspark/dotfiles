@@ -34,6 +34,7 @@ readonly ZYPPER_PACKAGES=(
 )
 
 readonly PIPX_PACKAGES=(
+  basedpyright
   poetry
   ruff
 )

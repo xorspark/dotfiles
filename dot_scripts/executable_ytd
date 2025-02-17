@@ -20,4 +20,8 @@ if [[ ! $format =~ mp3|vorbis|ogg ]]; then
   printf "Error: only mp3 and ogg(vorbis) allowed"
 fi
 
+if [[ $format == "ogg" ]]; then # correct to vorbis
+  format="vorbis"
+fi
+
 yt-dlp -o '%(artist)s - %(title)s.%(ext)s' -x --audio-format mp3 --embed-metadata --no-mtime "$YT"

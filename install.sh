@@ -10,10 +10,16 @@ readonly PACKAGES=(
   shfmt
   curl
   tmux
+  jo
+  jq
 )
 
 readonly UBUNTU_PACKAGES=(
   shellcheck
+  gcc-14
+  libgcc-15-dev
+  clang-19
+  libclang-19-dev
 )
 
 readonly ZYPPER_PACKAGES=(

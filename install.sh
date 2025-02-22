@@ -9,6 +9,7 @@ readonly PACKAGES=(
   neovim
   shfmt
   curl
+  tmux
 )
 
 readonly UBUNTU_PACKAGES=(

@@ -11,6 +11,8 @@ readonly PACKAGES=(
   curl
   tmux
   jo
+  mpv
+  yt-dlp
   jq
 )
 
@@ -34,6 +36,7 @@ readonly ZYPPER_PACKAGES=(
   gcc14
   gcc14-c++
   efm-langserver
+  opi
   fnm
   fnm-bash-completion
   python312

@@ -1,0 +1,8 @@
+#!/bin/bash
+# Because I'll never fucking remember this outright. Boom
+
+display_port="$(xrandr --listactivemonitors | grep -e "[^e]DP-1" | awk '{print $4}')"
+
+for id in $(xinput list | grep TouchScreen | cut -f2); do
+  xinput map-to-output "${id##*=}" "$display_port"
+done

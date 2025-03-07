@@ -1,0 +1,6 @@
+#!/bin/bash
+
+display="$(xrandr -q | grep 'HDMI-1 connected')"
+if [[ -n "$display" ]]; then
+  xrandr --output HDMI-1 --rotate left
+fi

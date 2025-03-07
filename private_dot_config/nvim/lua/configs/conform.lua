@@ -5,7 +5,7 @@ local options = {
     css = { "css_beautify" },
     html = { "html_beautify" },
     sql = { "sqruff" },
-    python = { "ruff_fix", "ruff_format", "ruff_organize_imports" }
+    python = { "ruff_fix", "ruff_format", "ruff_organize_imports" },
   },
   notify_on_error = true,
   format_on_save = {
@@ -16,17 +16,17 @@ local options = {
   formatters = {
     js_beautify = {
       inherit = true,
-      prepend_args = { "-s", "2" }
+      prepend_args = { "-s", "2" },
     },
     css_beautify = {
       inherit = true,
-      prepend_args = { "-s", "2" }
+      prepend_args = { "-s", "2" },
     },
     html_beautify = {
       inherit = true,
-      prepend_args = { "-s", "2" }
+      prepend_args = { "-s", "2" },
     },
-  }
+  },
 }
 
 require("conform").setup(options)

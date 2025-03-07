@@ -28,6 +28,8 @@ return {
         "markdown",
         "markdown_inline",
         "javascript",
+        "typescript",
+        "tsx",
       },
       auto_install = true,
     },

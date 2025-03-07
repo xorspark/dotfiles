@@ -28,6 +28,7 @@ readonly ZYPPER_PACKAGES=(
   ShellCheck
   xsel
   docker
+  StyLua
   luajit
   luajit-devel
   keyd
@@ -90,7 +91,7 @@ if [[ $ID =~ opensuse* ]]; then
   # fnm
   fnm install --lts
   eval "$(fnm env --use-on-cd --shell bash)"
-  npm install -g js-beautify
+  npm install -g js-beautify vscode-langservers-extracted typescript typescript-language-server
   #shellcheck disable=SC2086,SC2048
   pipx-3.12 install ${PIPX_PACKAGES[*]}
   pipx-3.12 inject poetry poetry-plugin-shell

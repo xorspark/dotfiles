@@ -77,4 +77,4 @@ fi
 
 [[ -f "$HOME/.atuin/bin/env" ]] && . "$HOME/.atuin/bin/env"
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
-eval "$(atuin init bash)"
+command -v atuin && eval "$(atuin init bash)"

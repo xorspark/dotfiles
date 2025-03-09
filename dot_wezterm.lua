@@ -41,7 +41,7 @@ local direction_keys = {
 
 local function is_vim(pane)
 	-- this is set by the plugin, and unset on ExitPre in Neovim
-	return pane:get_user_vars().IS_NVIM == "true"
+	return pane:get_user_vars().IS_NVIM == true
 end
 
 local function split_nav(resize_or_move, key)
@@ -66,7 +66,7 @@ local function split_nav(resize_or_move, key)
 end
 
 config.keys = {
-
+	{ key = ";", mods = "CTRL", action = wezterm.action.ShowDebugOverlay },
 	{ key = "l", mods = "ALT", action = wezterm.action.ShowLauncher },
 	{
 		key = "\\",

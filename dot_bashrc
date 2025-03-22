@@ -54,6 +54,10 @@ http_py_webserver() {
 case "$TERM" in
   xterm-color | *-256color) color_prompt=yes ;;
 esac
+# boo-urns:  https://github.com/python/cpython/issues/118840
+# TL;DR - the new REPL from 3.13+ does not use readline, therefore vi mode not
+# longer works.
+export PYTHON_BASIC_REPL=1
 
 parse_git_branch() {
   git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'

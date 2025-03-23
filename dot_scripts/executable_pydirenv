@@ -6,7 +6,7 @@ if [[ -f "${PWD}/.envrc" ]]; then
 fi
 
 if [[ -n $1 ]]; then
-  echo "$1" >.python_version
+  echo "$1" >.python-version
 fi
 
 cat <<EOF >"${PWD}"/.envrc

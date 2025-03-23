@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+
+if [[ -f "${PWD}/.envrc" ]]; then
+  printf '.envrc already exists. Re-allowing and then exitting\n'
+  direnv allow "${PWD}"
+fi
+
+if [[ -n $1 ]]; then
+  echo "$1" >.python_version
+fi
+
+cat <<EOF >"${PWD}"/.envrc
+layout uv
+EOF
+direnv allow "${PWD}"

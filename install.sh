@@ -14,6 +14,7 @@ readonly PACKAGES=(
   mpv
   yt-dlp
   jq
+  direnv
 )
 
 readonly UBUNTU_PACKAGES=(
@@ -27,7 +28,24 @@ readonly UBUNTU_PACKAGES=(
 readonly ZYPPER_PACKAGES=(
   ShellCheck
   xsel
+  qemu
+  qemu-arm
+  qemu-accel-qtest
+  qemu-block-dmg
+  qemu-block-gluster
+  qemu-block-iscsi
+  qemu-block-ssh
+  qemu-chardev-baum
+  qemu-doc
+  qemu-extra
+  qemu-ppc
+  qemu-s390x
+  qemu-skiboot
+  qemu-vhost-user-gpu
+  qemu-headless
+  qemu-linux-user
   docker
+  docker-compose
   StyLua
   luajit
   luajit-devel
@@ -95,6 +113,9 @@ if [[ $ID =~ opensuse* ]]; then
   #shellcheck disable=SC2086,SC2048
   pipx-3.12 install ${PIPX_PACKAGES[*]}
   pipx-3.12 inject poetry poetry-plugin-shell
+  sudo /sbin/qemu-binfmt-conf.sh --persistent yes --systemd ALL
+  sudo systemctl start systemd-binfmt
+  printf 'To fully enable multi-arch support in docker, run the following:\ndocker run --privileged --rm tonistiigi/binfmt --install all\nReboot afterwards.'
 else
   #shellcheck disable=SC2086,SC2048
   sudo $install_command -y ${UBUNTU_PACKAGES[*]}

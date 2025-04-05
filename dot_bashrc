@@ -64,6 +64,20 @@ parse_git_branch() {
 }
 export PS1="\[$(ppwd \l)\]\u@\h:\w \[\033[33m\]\$(parse_git_branch)\[\033[00m\]> "
 
+# autocomplete scripts in .scripts folder for newx
+_newx() {
+  if [[ ${#COMP_WORDS[@]} != 2 ]]; then
+    return
+  fi
+  local IFS=$'\n'
+  # ignore directories (for now)
+  local suggestions=($(compgen -W "$(ls -p "$SCRIPTS" | grep -v /)" -- "${COMP_WORDS[1]}"))
+
+  COMPREPLY=("${suggestions[@]}")
+}
+
+complete -F _newx newx
+
 # Docker
 export DOCKER_HOST=unix:///run/user/1000/docker.sock
 

@@ -1,0 +1,45 @@
+#!/usr/bin/bash
+# Script to create a minimal nginx docker container to push when standing up
+# an ECS stack using Cloudformation
+# This is helpful to debug any deployment issues by checking if the instance is
+# is accessible through the LB before the application container is pushed at the end
+# using CodePipeline
+
+port="${1:-80}"
+status_endpoint="${2:-status}"
+config_file_name="${3:-default}.conf"
+docker_file_name="Docker.nginx-ecs-placeholder.${config_file_name%%.conf}"
+
+printf -- '----------
+Creating placeholder ECS nginx Dockerfile in /tmp.
+Port: %s
+Status endpoint: /%s
+Conf file: %s
+----------
+' "$port" "$status_endpoint" "$config_file_name"
+printf "
+server {
+  listen  %s;
+  server_name localhost;
+  location / {
+    add_header Content-Type text/plain;
+    return 200 'Hello world';
+  }
+  location /%s {
+    add_header Content-Type text/plain;
+    return 200 'fgsfds (status ok)';
+  }
+}
+" "$port" "$status_endpoint" >"/tmp/$config_file_name"
+
+# ugly hack to prevent modeline from impacting this script
+printf "# %s: %s
+FROM nginx:alpine
+EXPOSE %s
+COPY %s /etc/nginx/conf.d/default.conf
+" "vim" "ft=dockerfile" "$port" "$config_file_name" >"/tmp/$docker_file_name"
+
+printf 'Created: 
+/tmp/%s
+/tmp/%s
+' "$config_file_name" "$docker_file_name"

@@ -1,0 +1,31 @@
+#!/bin/bash
+# Assumes MySpell is installed with en_US dictionary
+# Either gives you a random word or a random word that starts with whatever
+# letter in the first argument.
+
+usage() {
+  printf 'Usage: randomenword [-s search_char_or_regex_range] [-n num_words]\n'
+  printf 'Pulls a random common, frequent or special word from the MySpell en_US dictionary\n'
+}
+
+num_words=1
+search_str='[a-z]'
+
+while getopts 'h?s:n:' opt; do
+  case "$opt" in
+    s)
+      search_str="$OPTARG"
+      ;;
+    n)
+      num_words="$OPTARG"
+      ;;
+    h | \?)
+      usage
+      exit 0
+      ;;
+  esac
+done
+
+printf -v grep_args '^%s[^\/]*(\/M$|\/MS$|\/SM$)?$' "$search_str"
+
+grep -P "$grep_args" /usr/share/myspell/en_US.dic | cut -d'/' -f1 | shuf -n "$num_words"

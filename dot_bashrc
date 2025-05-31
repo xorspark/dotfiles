@@ -96,3 +96,4 @@ fi
 [[ -f "$HOME/.atuin/bin/env" ]] && . "$HOME/.atuin/bin/env"
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 command -v atuin &>/dev/null && eval "$(atuin init bash)"
+command -v direnv &>/dev/null && eval "$(direnv hook bash)"

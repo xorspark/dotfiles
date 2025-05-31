@@ -10,6 +10,20 @@ layout_uv() {
     log_status 'No virtual environment exists. Executing `uv venv` to create one.'
     uv init --no-readme
     rm hello.py
+    cat <<EOF >>"${PWD}"/pyproject.toml
+
+[tool.ruff]
+line-length = 119
+exclude = ["*.ipynb"]
+
+[tool.ruff.lint]
+# Flag but don't autofix unused import during development as
+# plugins that use ruff will just auto-remove imports on save,
+# which is annoying if you like to declare your imports in advance.
+unfixable = ["F401"]
+# Add bugbear-flake8, pep8-naming, pycodestyle-errors and warnings, flake8-simplify and flake8-fast
+extend-select = ["B", "N", "E", "W", "SIM", "FAST"]
+EOF
     uv venv $python_flags
     VIRTUAL_ENV="$(pwd)/.venv"
   fi

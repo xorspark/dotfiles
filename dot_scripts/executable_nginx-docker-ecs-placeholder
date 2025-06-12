@@ -8,7 +8,7 @@
 port="${1:-80}"
 status_endpoint="${2:-status}"
 config_file_name="${3:-default}.conf"
-docker_file_name="Docker.nginx-ecs-placeholder.${config_file_name%%.conf}"
+docker_file_name="Dockerfile.nginx-ecs-placeholder.${config_file_name%%.conf}"
 
 printf -- '----------
 Creating placeholder ECS nginx Dockerfile in /tmp.

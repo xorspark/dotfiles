@@ -58,9 +58,9 @@ readonly ZYPPER_PACKAGES=(
   opi
   fnm
   fnm-bash-completion
-  python312
-  python312-pipx
-  python312-devel
+  python313
+  python313-pipx
+  python313-devel
 )
 
 readonly PIPX_PACKAGES=(
@@ -111,8 +111,8 @@ if [[ $ID =~ opensuse* ]]; then
   eval "$(fnm env --use-on-cd --shell bash)"
   npm install -g js-beautify vscode-langservers-extracted typescript typescript-language-server
   #shellcheck disable=SC2086,SC2048
-  pipx-3.12 install ${PIPX_PACKAGES[*]}
-  pipx-3.12 inject poetry poetry-plugin-shell
+  pipx-3.13 install ${PIPX_PACKAGES[*]}
+  pipx-3.13 inject poetry poetry-plugin-shell
   sudo /sbin/qemu-binfmt-conf.sh --persistent yes --systemd ALL
   sudo systemctl start systemd-binfmt
   printf 'To fully enable multi-arch support in docker, run the following:\ndocker run --privileged --rm tonistiigi/binfmt --install all\nReboot afterwards.'

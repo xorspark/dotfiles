@@ -67,12 +67,12 @@ readonly PIPX_PACKAGES=(
   basedpyright
   poetry
   ruff
-  python-lsp-server
-  mypy
+  #  python-lsp-server
+  #  mypy
 )
 
 readonly PIPX_PACKAGES_WITH_DEPS=(
-  pylsp-mypy
+  #  pylsp-mypy
 )
 
 if [[ ! -f /etc/os-release ]]; then
@@ -119,7 +119,7 @@ if [[ $ID =~ opensuse* ]]; then
   #shellcheck disable=SC2086,SC2048
   pipx-3.13 install ${PIPX_PACKAGES[*]}
   #shellcheck disable=SC2086,SC2048
-  pipx-3.13 install ${PIPX_PACKAGES_WITH_DEPS[*]} --include-deps
+  # pipx-3.13 install ${PIPX_PACKAGES_WITH_DEPS[*]} --include-deps
   pipx-3.13 inject poetry poetry-plugin-shell
   sudo /sbin/qemu-binfmt-conf.sh --persistent yes --systemd ALL
   sudo systemctl start systemd-binfmt

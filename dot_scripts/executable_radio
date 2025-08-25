@@ -6,7 +6,7 @@
 # using pacmd list-sinks
 # Localise work pc's speaker/headphones is on index 3
 # shellcheck disable=SC2155
-readonly AUDIO_DEVICE_INDEXES="$(pactl list short sinks | grep alsa_output | cut -f1)"
+readonly AUDIO_DEVICE_INDEXES="$(pactl list short sinks | grep -E '(alsa|bluez)_output' | cut -f1)"
 readonly VOLUME_PERCENT="18%"
 
 stations=(
@@ -52,25 +52,22 @@ stations=(
   'http://192.168.1.35:9001/sparkfm.ogg'
 )
 
-
-
-
 stations+=("quit")
 
 select station in "${stations[@]}"; do
-    if [[ -n "$station" ]]; then
-        if [[ "$station" == "quit" ]]; then
-            exit 0
-        else
-            break
-        fi
+  if [[ -n $station ]]; then
+    if [[ $station == "quit" ]]; then
+      exit 0
+    else
+      break
     fi
+  fi
 done
 
 # Done to prevent blowing out my ears when running this after a zoom call
 # because some people have awful mics that force me to up my volume to 50%
 # The same volume level will kill my friggin eardrums when I play music.
-for sink in  $AUDIO_DEVICE_INDEXES; do
+for sink in $AUDIO_DEVICE_INDEXES; do
   if ! pactl set-sink-volume "$sink" "$VOLUME_PERCENT"; then
     echo "Could not set volume. Check if pulse audio isn't busted. "
     exit 1

@@ -61,6 +61,7 @@ readonly ZYPPER_PACKAGES=(
   python313
   python313-pipx
   python313-devel
+  lua-language-server
 )
 
 readonly PIPX_PACKAGES=(

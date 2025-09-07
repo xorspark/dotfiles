@@ -15,6 +15,7 @@ readonly PACKAGES=(
   yt-dlp
   jq
   direnv
+  keepassxc
 )
 
 readonly UBUNTU_PACKAGES=(
@@ -62,6 +63,7 @@ readonly ZYPPER_PACKAGES=(
   python313-pipx
   python313-devel
   lua-language-server
+  opentofu
 )
 
 readonly PIPX_PACKAGES=(

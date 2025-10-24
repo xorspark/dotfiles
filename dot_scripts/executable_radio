@@ -48,6 +48,8 @@ stations=(
   'https://s5.radio.co/s89dcf578d/listen'
   # NY DNB radio
   'https://edmdnb.com:448/radio/8000/radio.mp3'
+  # Radio Gameplay
+  'https://c22.radioboss.fm:8144/GamePlay'
   # SparkFM :)
   'http://192.168.1.35:9001/sparkfm.ogg'
 )

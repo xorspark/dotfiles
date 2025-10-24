@@ -126,7 +126,8 @@ if [[ $ID =~ opensuse* ]]; then
   pipx-3.13 inject poetry poetry-plugin-shell
   sudo /sbin/qemu-binfmt-conf.sh --persistent yes --systemd ALL
   sudo systemctl start systemd-binfmt
-  printf 'To fully enable multi-arch support in docker, run the following:\ndocker run --privileged --rm tonistiigi/binfmt --install all\nReboot afterwards.'
+  printf 'To fully enable multi-arch support in docker, run the following:\ndocker run --privileged --rm tonistiigi/binfmt --install all\nReboot afterwards.\n'
+  printf 'To enable keyd:\nsudo mkdir /etc/keyd\nsudo cp etc_keyd/{name-of-config}.conf\nsudo systemctl start keyd.service\n'
 else
   #shellcheck disable=SC2086,SC2048
   sudo $install_command -y ${UBUNTU_PACKAGES[*]}

@@ -78,6 +78,13 @@ _newx() {
 
 complete -F _newx newx
 
+# helper alias to count number of commits diverged from the current branch to target branch
+# mainly used for rebasing after many commits.
+diverged_commits_from() {
+  branch_name="${1:-main}"
+  git rev-list --count HEAD ^"$branch_name"
+}
+
 # Docker
 export DOCKER_HOST=unix:///run/user/1000/docker.sock
 

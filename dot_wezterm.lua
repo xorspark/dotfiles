@@ -143,6 +143,16 @@ config.keys = {
 			end),
 		}),
 	},
+	{
+		key = ";",
+		mods = "LEADER",
+		action = wezterm.action.ActivatePaneDirection("Prev"),
+	},
+	{
+		key = "o",
+		mods = "LEADER",
+		action = wezterm.action.ActivatePaneDirection("Next"),
+	},
 }
 for i = 1, 9 do
 	table.insert(config.keys, {

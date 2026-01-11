@@ -26,19 +26,23 @@ if v:version >= 800
   set listchars=space:*,trail:*,nbsp:*,extends:>,precedes:<,tab:\|>
 endif
 
-" mark trailing spaces as errors     
+" mark trailing spaces as errors
 match ErrorMsg /\s\+$/
 
 set ttyfast
 
 
 fun! TrimWhitespace()
+  if exists('b:noStripWhitespace')
+    return
+  endif
 	let l:save = winsaveview()
 	keeppatterns %s/\s\+$//e
 	call winrestview(l:save)
 endfun
 
-"autocmd BufWritePre * :call TrimWhitespace()
+autocmd BufWritePre * :call TrimWhitespace()
+autocmd FileType markdown let b:noStripWhitespace=1
 
 augroup numbertoggle
   autocmd!

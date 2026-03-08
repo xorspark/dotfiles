@@ -20,6 +20,7 @@ set expandtab
 set backspace=indent,eol,start
 set autoindent
 set smartindent
+set scrolloff=5
 
 if v:version >= 800
   " better ascii friendly listchars

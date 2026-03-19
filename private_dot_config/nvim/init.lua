@@ -1,6 +1,9 @@
-local vimrc = vim.fn.stdpath("config") .. "/vimrc.vim" vim.cmd.source(vimrc)
+local vimrc = vim.fn.stdpath "config" .. "/vimrc.vim"
+vim.cmd.source(vimrc)
 vim.g.base46_cache = vim.fn.stdpath "data" .. "/base46/"
 vim.g.mapleader = ","
+vim.filetype.add { extension = { p8 = "pico8" } }
+vim.filetype.add { filename = { [".buildfile"] = "lua" } }
 
 -- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
@@ -23,7 +26,7 @@ require("lazy").setup({
     import = "nvchad.plugins",
   },
 
-  { import = "plugins" }
+  { import = "plugins" },
 }, lazy_config)
 
 -- load theme

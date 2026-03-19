@@ -14,7 +14,6 @@ return {
       require "configs.lspconfig"
     end,
   },
-
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
@@ -30,6 +29,10 @@ return {
         "javascript",
         "typescript",
         "tsx",
+        "go",
+        "gomod",
+        "gowork",
+        "gosum",
       },
       auto_install = true,
     },
@@ -54,5 +57,14 @@ return {
       keymap.set("n", "<C-S-k>", smart_splits.resize_up)
       keymap.set("n", "<C-S-l>", smart_splits.resize_right)
     end,
+  },
+  {
+    "shortcuts/no-neck-pain.nvim",
+    version = "*",
+    opts = {
+      autocmds = {
+        -- enableOnVimEnter = true,
+      },
+    },
   },
 }

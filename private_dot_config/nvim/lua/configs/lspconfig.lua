@@ -1,20 +1,41 @@
 -- load defaults i.e lua_lsp
 require("nvchad.configs.lspconfig").defaults()
 
-local lspconfig = require "lspconfig"
+-- local lspconfig = require "lspconfig"
+-- local lspconfig = vim.lsp.config
 
 local nvlsp = require "nvchad.configs.lspconfig"
 
-local servers = { "html", "cssls", "basedpyright", "ts_ls", "eslint", "intelephense", "ruff" }
+local servers = { "html", "cssls", "ts_ls", "eslint", "intelephense", "ruff", "gopls", "ty" } --"basedpyright"
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
+  vim.lsp.config(lsp, {
     on_attach = nvlsp.on_attach,
     on_init = nvlsp.on_init,
     capabilities = nvlsp.capabilities,
-  }
+  })
+  vim.lsp.enable(lsp)
 end
+
+vim.lsp.config("clangd", {
+  on_attach = nvlsp.on_attach,
+  on_init = nvlsp.on_init,
+  capabilities = nvlsp.capabilities,
+  cmd = { "clangd", "--background-index", "--clang-tidy", "--log=verbose" },
+  init_options = {
+    fallbackFlags = { "-std=c++23" },
+  },
+})
+vim.lsp.enable "clangd"
+
+vim.lsp.config("pico8_ls", {
+  on_attach = nvlsp.on_attach,
+  on_init = nvlsp.on_init,
+  capabilities = nvlsp.capabilities,
+  filetypes = { "p8", "pico8" },
+})
+vim.lsp.enable "pico8_ls"
 
 -- configuring single server, example: typescript
 -- lspconfig.ts_ls.setup {
@@ -23,7 +44,7 @@ end
 --   capabilities = nvlsp.capabilities,
 -- }
 
-lspconfig["rust_analyzer"].setup {
+vim.lsp.config("rust_analyzer", {
   on_attach = nvlsp.on_attach,
   on_init = nvlsp.on_init,
   capabilities = nvlsp.capabilities,
@@ -36,9 +57,10 @@ lspconfig["rust_analyzer"].setup {
       command = "clippy",
     },
   },
-}
+})
+vim.lsp.enable "rust_analyzer"
 
-lspconfig["efm"].setup {
+vim.lsp.config("efm", {
   on_attach = nvlsp.on_attach,
   -- on_init = nvlsp.on_init,
   capabilities = nvlsp.capabilities,
@@ -73,4 +95,5 @@ lspconfig["efm"].setup {
       },
     },
   },
-}
+})
+vim.lsp.enable "efm"

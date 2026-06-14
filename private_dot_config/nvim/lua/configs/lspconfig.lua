@@ -6,7 +6,7 @@ require("nvchad.configs.lspconfig").defaults()
 
 local nvlsp = require "nvchad.configs.lspconfig"
 
-local servers = { "html", "cssls", "ts_ls", "eslint", "intelephense", "ruff", "gopls", "ty" } --"basedpyright"
+local servers = { "html", "cssls", "ts_ls", "eslint", "intelephense", "ruff", "gopls", "ty" } -- "elixirls" } --"basedpyright"
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do
@@ -28,6 +28,11 @@ vim.lsp.config("clangd", {
   },
 })
 vim.lsp.enable "clangd"
+
+vim.lsp.config("elixirls", {
+  cmd = { "/home/spark/.bin/elixir-ls/language_server.sh" },
+})
+vim.lsp.enable "elixirls"
 
 vim.lsp.config("pico8_ls", {
   on_attach = nvlsp.on_attach,

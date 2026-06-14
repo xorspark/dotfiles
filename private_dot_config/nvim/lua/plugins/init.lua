@@ -6,7 +6,14 @@ return {
       require "configs.conform"
     end,
   },
-
+  {
+    "tadmccorkle/markdown.nvim",
+    -- ft = "markdown", -- or 'event = "VeryLazy"'
+    event = "VeryLazy",
+    opts = {
+      -- configuration here or empty for defaults
+    },
+  },
   -- These are some examples, uncomment them if you want to see them work!
   {
     "neovim/nvim-lspconfig",
@@ -16,6 +23,7 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     opts = {
       ensure_installed = {
         "vim",
@@ -33,6 +41,7 @@ return {
         "gomod",
         "gowork",
         "gosum",
+        "elixir",
       },
       auto_install = true,
     },
@@ -65,6 +74,38 @@ return {
       autocmds = {
         -- enableOnVimEnter = true,
       },
+    },
+  },
+  {
+    "elixir-tools/elixir-tools.nvim",
+    version = "*",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      local elixir = require "elixir"
+      local elixirls = require "elixir.elixirls"
+
+      elixir.setup {
+        nextls = { enable = false },
+        elixirls = {
+          enable = true,
+          cmd = "/home/spark/.bin/elixir-ls/language_server.sh",
+          settings = elixirls.settings {
+            dialyzerEnabled = false,
+            enableTestLenses = false,
+          },
+          on_attach = function(client, bufnr)
+            vim.keymap.set("n", "<space>fp", ":ElixirFromPipe<cr>", { buffer = true, noremap = true })
+            vim.keymap.set("n", "<space>tp", ":ElixirToPipe<cr>", { buffer = true, noremap = true })
+            vim.keymap.set("v", "<space>em", ":ElixirExpandMacro<cr>", { buffer = true, noremap = true })
+          end,
+        },
+        projectionist = {
+          enable = true,
+        },
+      }
+    end,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
     },
   },
 }

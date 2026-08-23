@@ -1,6 +1,8 @@
 local vimrc = vim.fn.stdpath "config" .. "/vimrc.vim"
 vim.cmd.source(vimrc)
+
 vim.g.base46_cache = vim.fn.stdpath "data" .. "/base46/"
+
 vim.g.mapleader = ","
 vim.filetype.add { extension = { p8 = "pico8" } }
 vim.filetype.add { filename = { [".buildfile"] = "lua" } }
@@ -30,6 +32,7 @@ require("lazy").setup({
 }, lazy_config)
 
 -- load theme
+dofile(vim.g.base46_cache .. "syntax")
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
 

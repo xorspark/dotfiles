@@ -24,4 +24,15 @@ if [[ $format == "ogg" ]]; then # correct to vorbis
   format="vorbis"
 fi
 
-yt-dlp -o '%(artist)s - %(title)s.%(ext)s' -x --audio-format mp3 --embed-metadata --no-mtime "$YT"
+if [[ $format == "mp3" ]]; then
+  format_flags="-t mp3"
+else
+  format_flags="-x --audio-format $format"
+fi
+
+filename_template='%(uploader)s - %(title)s.%(ext)s'
+if [[ $YT == *soundcloud.com/* ]]; then
+  filename_template='%(artist)s - %(title)s.%(ext)s'
+fi
+
+yt-dlp -o "$filename_template" $format_flags --embed-metadata --no-mtime "$YT"

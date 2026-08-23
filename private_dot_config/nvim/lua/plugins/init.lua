@@ -33,6 +33,10 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile" },
+    config = function()
+      dofile(vim.g.base46_cache .. "treesitter")
+    end,
     branch = "main",
     opts = {
       ensure_installed = {

@@ -3,7 +3,17 @@ return {
     "stevearc/conform.nvim",
     event = "BufWritePre", -- uncomment for format on save
     config = function()
-      require "configs.conform"
+      local ConformConfig = require "configs.conform_dynamic"
+      local cc = ConformConfig()
+      if cc:disable_format(0) then
+        return nil
+      end
+      local config = cc:get_override_config(0)
+      if config == nil then
+        config = cc:get_default_config()
+      end
+      local conform = require "conform"
+      conform.setup(config)
     end,
   },
   {

@@ -1,3 +1,4 @@
+-- Deprecated. Set in conform_dynamic.lua
 local options = {
   formatters_by_ft = {
     pico8 = { "stylua" },
